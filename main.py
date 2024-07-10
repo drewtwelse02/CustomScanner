@@ -20,7 +20,7 @@ response = requests.post(session_auth_url,
 response_json = response.json()
 SESSION_ID = response_json.get("stream")['sessionid']
 
-def scan(ticker):
+async def scan(ticker):
     # Look for Potential Prior Bar Low Break on Big Caps
     # Get Previous Day OCHL data 
     yt_date = date.today()-timedelta(days=1)
@@ -30,7 +30,7 @@ def scan(ticker):
                       headers={'Authorization': 'Bearer '+api_key, 'Accept': 'application/json'} )
         pd_json = pd.json()
         current_stock_price = float(ticker['price'])
-        yt_low              = float(pd_json["history"]["day"]['low'])
+        yt_low              = float(pd_json["history"]['day'][0]['low'])
         #Check if the stock price is less than 200 and currently $1 away from the PDL, then Alert
         if ( current_stock_price <= 200 and (current_stock_price - yt_low) <= 1):
             print (f"Send Alert (1 + ) - {ticker['symbol']}")
@@ -38,9 +38,10 @@ def scan(ticker):
             print (f"Send Alert (200 + ) - {ticker['symbol']}")
         #SMCI AVGO ETC 
         elif(current_stock_price > 400 and (current_stock_price - yt_low) <= 5):
-            print (f"Send Alert (400+) - {ticker['symbol']}")
-    except :
-        print (f"Error Occured while fetching daily data for  {ticker['symbol']}")
+            print (f"Send Alert (400+) - {ticker['symbol']}")	      
+    except Exception as error :
+        #print (f"Error Occured while fetching daily data for  {ticker['symbol']}")
+        print ("Error Occured while fetching daily data for", error)
 
     
 
@@ -53,6 +54,6 @@ async def ws_connect(sl):
         async for ticker in websocket:
             #print(f"<<< {ticker}")
             # Multiple Threads 
-            scan(json.loads(ticker))
+            await scan(json.loads(ticker))
 
 asyncio.run(ws_connect(Stock_List))
