@@ -12,7 +12,7 @@ session_auth_url    = "https://api.tradier.com/v1/markets/events/session"
 
 Stock_List = ["AAPL","GOOGL","RDDT","MSTR","MARA","COIN","MU","QCOM","AMD","AVGO","NVDL","SMCI","TSLA","RIVN","WFC","GS","BOFA","AXP","MS","JPM","FDX","UPS","AMZN"]
 
-client = schwabdev.Client("snaHLsmvGivMq6vDDPwBzM4U0YQY6GEf", "Pv3FIPlYzTq39ccN")
+client = schwabdev.Client("", "")
 client.update_tokens_auto()
 streamer = client.stream
 streamer.start()
