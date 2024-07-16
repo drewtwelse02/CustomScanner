@@ -11,7 +11,7 @@ import statistics
 
 historical_data_url = "https://api.tradier.com/v1/markets/history"
 session_auth_url    = "https://api.tradier.com/v1/markets/events/session"
-Stock_List = ["AAPL","GOOGL","RDDT","MSTR","MARA","COIN","MU","QCOM","AMD","AVGO","NVDL","SMCI","TSLA","RIVN","WFC","GS","BOFA","AXP","MS","JPM","FDX","UPS","AMZN"]
+Stock_List = ["SPY","META","RDDT","MSTR","MARA","COIN","MU","QCOM","AMD","AVGO","NVDL","SMCI","TSLA","RIVN","WFC","GS","BOFA","AXP","MS","JPM","FDX","UPS","AMZN"]
 
 # Create Market Session 
 api_key = os.environ['TRADIER_API_KEY']
@@ -39,7 +39,7 @@ def backtest(tickers):
         td_date = td_date -timedelta(days=1)
         aggs = []
         std_dev = 0
-        for a in client.list_aggs(ticker=tickers[12], multiplier=2, timespan="minute", from_=str(td_date-timedelta(days=10)), to=str(td_date), limit=50000):
+        for a in client.list_aggs(ticker=tickers[1], multiplier=2, timespan="minute", from_=str(td_date-timedelta(days=10)), to=str(td_date), limit=50000):
             #print("Working")
             aggs.append(a.volume)
         std_dev = statistics.stdev(aggs)

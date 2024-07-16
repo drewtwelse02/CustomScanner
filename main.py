@@ -4,6 +4,7 @@ import requests
 import os 
 import json
 from datetime import date, timedelta 
+import schwabdev
 
 historical_data_url = "https://api.tradier.com/v1/markets/history"
 session_auth_url    = "https://api.tradier.com/v1/markets/events/session"
@@ -11,14 +12,11 @@ session_auth_url    = "https://api.tradier.com/v1/markets/events/session"
 
 Stock_List = ["AAPL","GOOGL","RDDT","MSTR","MARA","COIN","MU","QCOM","AMD","AVGO","NVDL","SMCI","TSLA","RIVN","WFC","GS","BOFA","AXP","MS","JPM","FDX","UPS","AMZN"]
 
-# Create Market Session 
-api_key = os.environ['TRADIER_API_KEY']
-response = requests.post(session_auth_url,
-    data={},
-    headers={'Authorization': 'Bearer '+str(api_key), 'Accept': 'application/json'})
-
-response_json = response.json()
-SESSION_ID = response_json.get("stream")['sessionid']
+client = schwabdev.Client("snaHLsmvGivMq6vDDPwBzM4U0YQY6GEf", "Pv3FIPlYzTq39ccN")
+client.update_tokens_auto()
+streamer = client.stream
+streamer.start()
+streamer.send(streamer.level_one_quote("AMD","0,1,2,3,4,5"))
 
 async def scan(ticker):
     # Look for Potential Prior Bar Low Break on Big Caps
@@ -56,4 +54,4 @@ async def ws_connect(sl):
             # Multiple Threads 
             await scan(json.loads(ticker))
 
-asyncio.run(ws_connect(Stock_List))
+#asyncio.run(ws_connect(Stock_List))
