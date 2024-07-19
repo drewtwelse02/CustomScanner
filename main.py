@@ -4,9 +4,6 @@ import requests
 import os 
 import json
 from datetime import date, timedelta 
-import schwabdev
-import webbrowser 
-import base64
 
 historical_data_url = "https://api.tradier.com/v1/markets/history"
 session_auth_url    = "https://api.tradier.com/v1/markets/events/session"
