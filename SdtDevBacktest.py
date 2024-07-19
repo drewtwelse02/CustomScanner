@@ -11,7 +11,7 @@ import statistics
 
 historical_data_url = "https://api.tradier.com/v1/markets/history"
 session_auth_url    = "https://api.tradier.com/v1/markets/events/session"
-Stock_List = ["SPY","META","RDDT","MSTR","MARA","COIN","MU","QCOM","AMD","AVGO","NVDL","SMCI","TSLA","RIVN","WFC","GS","BOFA","AXP","MS","JPM","FDX","UPS","AMZN"]
+Stock_List = ["SPY","QQQ","META","RDDT","MSTR","MARA","COIN","MU","QCOM","AMD","AVGO","NVDL","SMCI","TSLA","RIVN","WFC","GS","BOFA","AXP","MS","JPM","FDX","UPS","AMZN"]
 
 # Create Market Session 
 api_key = os.environ['TRADIER_API_KEY']
@@ -34,7 +34,7 @@ def backtest(tickers):
     i = 0
     td_date = (date.today()-timedelta(days=1))
     chk_date = date.today()
-    while i < 30:    
+    while i < 10:    
         # Calculate the Std deviation of the last 10 days of 2mns bar data      
         td_date = td_date -timedelta(days=1)
         aggs = []
@@ -46,9 +46,9 @@ def backtest(tickers):
         #print(f"Standard Deviation of sample is {std_dev}")
         # Compare each 2mns bar of data with the std dev 
 
-        for d in client.list_aggs(ticker=tickers[0], multiplier=2, timespan="minute", from_=str(chk_date), to=str(chk_date), limit=50000):
+        for d in client.list_aggs(ticker=tickers[1], multiplier=2, timespan="minute", from_=str(chk_date), to=str(chk_date), limit=50000):
             if (d.volume > 5* std_dev ):
-                print(f"5x std dev found {convert_date(d.timestamp)} ")
+                print(f"{std_dev}- High std dev found {convert_date(d.timestamp)} ")
 
         td_date  = td_date-timedelta(days=1)
         chk_date = chk_date-timedelta(days=1)
