@@ -46,7 +46,7 @@ async def scan(ticker):
             print (f"Send Alert (200 + ) - {ticker['symbol']}")
         #SMCI AVGO ETC 
         elif(current_stock_price > 400 and (current_stock_price - yt_low) <= 5 and (current_stock_price - yt_low) > 0):
-            print(ticker)
+            #print(ticker)
             print (f"Send Alert (400+) - {ticker['symbol']}")	      
     except Exception as error :
         #print (f"Error Occured while fetching daily data for  {ticker['symbol']}")

@@ -1,8 +1,4 @@
-import asyncio
-import websockets
-import requests
 import os 
-import json
 import pytz
 from datetime import date, timedelta,datetime
 
@@ -54,16 +50,4 @@ def backtest(tickers):
         chk_date = chk_date-timedelta(days=1)
         i = i+1
 
-#Connect to the web socket Server 
-async def ws_connect(sl):
-    uri = "wss://ws.tradier.com/v1/markets/events"
-    async with websockets.connect(uri, ssl=True, compression=None) as websocket:
-        payload = '{"symbols": ["AAPL","GOOGL","RDDT","MSTR","MARA","COIN","MU","QCOM","AMD","AVGO","NVDL","SMCI","TSLA","RIVN","WFC","GS","BOFA","AXP","MS","JPM","FDX","UPS","AMZN"], "sessionid": "'+ SESSION_ID +'", "filter": ["trade"], "linebreak": true}'
-        await websocket.send(payload)
-        async for ticker in websocket:
-            print(f"<<< {ticker}")
-            # Multiple Threads 
-            #await scan(json.loads(ticker))
-
-##asyncio.run(ws_connect(Stock_List))
 backtest(Stock_List)
