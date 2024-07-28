@@ -1,4 +1,3 @@
-from Session import Session
 import asyncio
 import websockets
 import requests
@@ -6,17 +5,15 @@ import os
 import json
 from datetime import date, timedelta 
 from ConnectionHandler  import ConnectionHandler
-
-historical_data_url = "https://api.tradier.com/v1/markets/history"
-
-#Get Market Session 
-session_id  = Session().get_session_id()
+import Session
 
 # Connection Handler & Run Server Forever  
-conn = ConnectionHandler()
+conn =  ConnectionHandler()
 asyncio.run(conn.setup())
+#asyncio.run(conn.LaunchScanner())
 
-
+session_id  = Session.Session().get_session_id()
+historical_data_url = "https://api.tradier.com/v1/markets/history"
 
 async def pdl_scan(ticker):
     # Look for Potential Prior Bar Low Break on Big Caps
@@ -46,7 +43,7 @@ async def pdl_scan(ticker):
     
 
 #Connect to the web socket Server 
-async def ws_connect():
+async def tradier_connect():
    
     uri = "wss://ws.tradier.com/v1/markets/events"
     async with websockets.connect(uri, ssl=True, compression=None) as websocket:
@@ -55,5 +52,4 @@ async def ws_connect():
         async for ticker in websocket:
             # Launch PDL Scanner 
             await pdl_scan(json.loads(ticker))
-            # 
-asyncio.run(ws_connect())
+#asyncio.run(tradier_connect())
