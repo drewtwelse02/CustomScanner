@@ -19,4 +19,6 @@ class Session:
     
     def get_session_id(self):
        return self.session_id
+    def get_historical_data_url(self):
+        return self.historical_data_url
     
