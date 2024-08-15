@@ -1,11 +1,10 @@
 import asyncio
 import websockets
 import requests
-import os 
-import json
 from datetime import date, timedelta
 from StdDev import StdDev
 from Session import Session
+import DB
 
 # historical_data_url = "https://api.tradier.com/v1/markets/history"
 # session_auth_url    = "https://api.tradier.com/v1/markets/events/session"
@@ -16,8 +15,9 @@ from Session import Session
 tradier_session = Session()
 session_id =tradier_session.get_session_id()
 
+# Launch Database Engine 
+DB.DB()
 
-print(session_id)
 Stock_List = ["AAPL","GOOGL","RDDT","MSTR","MARA","COIN","MU","QCOM","AMD","AVGO","NVDL","SMCI","TSLA","RIVN","WFC","GS","BOFA","AXP","MS","JPM","FDX","UPS","AMZN"]
 
 
@@ -59,4 +59,4 @@ async def ws_connect(sl):
             print(ticker)
             #pdl_scan(json.loads(ticker))
             #std_dev.runstd_dev(json.loads(ticker))
-asyncio.run(ws_connect(Stock_List))
+#asyncio.run(ws_connect(Stock_List))
