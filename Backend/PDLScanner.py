@@ -3,7 +3,8 @@ import websockets
 import requests
 import os 
 import json
-from datetime import date, timedelta 
+from datetime import date, timedelta
+from StdDev import StdDev
 
 historical_data_url = "https://api.tradier.com/v1/markets/history"
 session_auth_url    = "https://api.tradier.com/v1/markets/events/session"
@@ -27,7 +28,7 @@ except Exception as error:
     print("Unable to Create market Session ")
     exit()
 
-async def scan(ticker):
+def pdl_scan(ticker):
     # Look for Potential Prior Bar Low Break on Big Caps
     # Get Previous Day OCHL data 
     yt_date = date.today()-timedelta(days=1)
@@ -52,16 +53,16 @@ async def scan(ticker):
         #print (f"Error Occured while fetching daily data for  {ticker['symbol']}")
         print ("Error Occured while fetching daily data for", error)
 
-    
-
 #Connect to the web socket Server 
 async def ws_connect(sl):
     uri = "wss://ws.tradier.com/v1/markets/events"
+    std_dev = StdDev()
     async with websockets.connect(uri, ssl=True, compression=None) as websocket:
-        payload = '{"symbols": ["AAPL","GOOGL","RDDT","MSTR","MARA","COIN","MU","QCOM","AMD","AVGO","NVDL","SMCI","TSLA","RIVN","WFC","GS","BOFA","AXP","MS","JPM","FDX","UPS","AMZN"], "sessionid": "'+ session_id +'", "filter": ["trade"], "linebreak": true}'
+        payload = '{"symbols": ["LLY","GOOGL","RDDT","MSTR","MARA","COIN","MU","QCOM","AMD","AVGO","NVDL","SMCI","TSLA","RIVN","WFC","GS","BOFA","AXP","MS","JPM","FDX","UPS","AMZN"], "sessionid": "'+ session_id +'", "filter": ["trade"], "linebreak": true}'
         await websocket.send(payload)
         async for ticker in websocket:
             # Multiple Threads 
             #print(ticker)
-            await scan(json.loads(ticker))
+            #pdl_scan(json.loads(ticker))
+            std_dev.runstd_dev(json.loads(ticker))
 asyncio.run(ws_connect(Stock_List))
