@@ -4,21 +4,24 @@ import requests
 from datetime import date, timedelta
 from StdDev import StdDev
 from Session import Session
-import DB
+from Db import DB
 
 # historical_data_url = "https://api.tradier.com/v1/markets/history"
 # session_auth_url    = "https://api.tradier.com/v1/markets/events/session"
 # tradier_url = 'https://api.tradier.com/v1/markets/events/session'
-
+Stock_List = ["AAPL","GOOGL","RDDT","MSTR","MARA","COIN","MU","QCOM","AMD","AVGO","NVDL","SMCI","TSLA","RIVN","WFC","GS","BAC","AXP","MS","JPM","FDX","UPS","AMZN"]
 
 # Initialize Market Session from Tradier 
 tradier_session = Session()
 session_id =tradier_session.get_session_id()
 
 # Launch Database Engine 
-DB.DB()
+db = DB()
+# Check if PD table needs to be loaded 
+if (db.initialize_pd_tb() is True ):
+    asyncio.run(db.load_last_pd_data(Stock_List))
 
-Stock_List = ["AAPL","GOOGL","RDDT","MSTR","MARA","COIN","MU","QCOM","AMD","AVGO","NVDL","SMCI","TSLA","RIVN","WFC","GS","BOFA","AXP","MS","JPM","FDX","UPS","AMZN"]
+
 
 
 
