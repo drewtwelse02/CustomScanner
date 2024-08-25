@@ -5,7 +5,7 @@ import statistics
 from datetime import date
 class DB:
     def __init__(self):
-        printinfo.info("Checking Database Status")
+        #printinfo.info("Checking Database Status")
         #Check if the database already exist, If not create it 
         self.conn = sqlite3.connect("cs.db")
         self.s = Session.Session()
@@ -37,7 +37,7 @@ class DB:
             self.conn.commit()
 
         r = self.conn.execute("SELECT * FROM PD")
-        if (r.fetchone is not None):
+        if (r.fetchone() is not None):
             printinfo.info("Prior Days Data Loaded Successfully")
         
     def load_std_Dev (self,stock_list):
@@ -51,9 +51,13 @@ class DB:
             self.conn.commit()
         
         r = self.conn.execute("SELECT * FROM STDDEV")
-        if (r.fetchone is not None):
+        if (r.fetchone() is not None):
             #print(r.fetchall())
             printinfo.info("Prior Days Data Loaded Successfully")
+    async def get_daily_data_from_db(self,symbol):
+        r = self.conn.execute("SELECT * FROM PD WHERE ticker_symbol=?",(symbol,))
+        return r.fetchone()[1]
+
 
 
 
