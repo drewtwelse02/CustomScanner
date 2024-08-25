@@ -1,3 +1,4 @@
+# For Backtesting only, Not part of the live scanner 
 import os 
 import pytz
 from datetime import date, timedelta,datetime

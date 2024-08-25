@@ -27,11 +27,15 @@ class Session:
         return self.historical_data_url
     
     async def get_yt_daily_data(self,ticker):
+        # by default the prior trading day should be one day back
+        days_back = 1
+        # Check to see if its sunday, to move 2 days prior (Friday to Today)
+        if (date.today().isoweekday() == 7):
+            days_back = 2 
         yt_daily_resp = requests.get(self.historical_data_url,
-        params= {'symbol': str(ticker), 'interval': 'daily', 'start': str(date.today()- timedelta(days=1)), 'end': date.today(), 'session_filter': 'all'},
+        params= {'symbol': str(ticker), 'interval': 'daily', 'start': str(date.today()- timedelta(days=days_back)), 'end': date.today(), 'session_filter': 'all'},
         headers={'Authorization': 'Bearer '+ self.tradier_api_token, 'Accept': 'application/json'})
         json_yt_daily_resp = yt_daily_resp.json()
-        #print(json_yt_daily_resp.status_code)
         return json_yt_daily_resp
     def get_last_volume_bars (self,symbol):
         # List Aggregates (Bars)

@@ -30,6 +30,7 @@ async def ws_connect(sl):
         await websocket.send(payload)
         async for ticker in websocket:
             # Multiple Threads 
-            await Scan.pdl_scan(ticker)
+            #await Scan.pdl_scan(ticker)
+            print ()
 
-asyncio.run(ws_connect(Stock_List))
+#asyncio.run(ws_connect(Stock_List))
