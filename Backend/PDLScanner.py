@@ -3,9 +3,8 @@ import websockets
 from datetime import date, timedelta
 from StdDev import StdDev
 from Session import Session
-import json
-from Db import DB
 import Scan
+from Db import DB
 
 Stock_List = ["AAPL","GOOGL","RDDT","MSTR","MARA","COIN","MU","QCOM","AMD","AVGO","NVDL","SMCI","TSLA","RIVN","WFC","GS","BAC","AXP","MS","JPM","FDX","UPS","AMZN"]
 
@@ -30,7 +29,7 @@ async def ws_connect(sl):
         await websocket.send(payload)
         async for ticker in websocket:
             # Multiple Threads 
-            #await Scan.pdl_scan(ticker)
-            print ()
+            await Scan.pdl_scan(ticker)
+            #print (ticker)
 
-#asyncio.run(ws_connect(Stock_List))
+asyncio.run(ws_connect(Stock_List))

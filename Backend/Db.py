@@ -56,7 +56,7 @@ class DB:
             printinfo.info("Prior Days Data Loaded Successfully")
     async def get_daily_data_from_db(self,symbol):
         r = self.conn.execute("SELECT * FROM PD WHERE ticker_symbol=?",(symbol,))
-        return r.fetchone()[1]
+        return r.fetchall()
 
 
 

@@ -33,7 +33,7 @@ class Session:
         if (date.today().isoweekday() == 7):
             days_back = 2 
         yt_daily_resp = requests.get(self.historical_data_url,
-        params= {'symbol': str(ticker), 'interval': 'daily', 'start': str(date.today()- timedelta(days=days_back)), 'end': date.today(), 'session_filter': 'all'},
+        params= {'symbol': str(ticker), 'interval': 'daily', 'start': str(date.today()- timedelta(days=days_back)), 'end': str(date.today()- timedelta(days=days_back)), 'session_filter': 'all'},
         headers={'Authorization': 'Bearer '+ self.tradier_api_token, 'Accept': 'application/json'})
         json_yt_daily_resp = yt_daily_resp.json()
         return json_yt_daily_resp
