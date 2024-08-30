@@ -23,13 +23,12 @@ if (db.initialize_pd_tb() is True ):
 #Connect to the web socket Server 
 async def ws_connect(sl):
     uri = "wss://ws.tradier.com/v1/markets/events"
-    std_dev = StdDev()
     async with websockets.connect(uri, ssl=True, compression=None) as websocket:
-        payload = '{"symbols": ["AAPL","GOOGL","RDDT","MSTR","MARA","COIN","MU","QCOM","AMD","AVGO","NVDL","SMCI","TSLA","RIVN","WFC","GS","BAC","AXP","MS","JPM","FDX","UPS","AMZN"], "sessionid": "'+ session_id +'", "filter": ["trade"], "linebreak": true}'
+        payload = '{"symbols": ["AAPL","GOOGL","RDDT","MSTR","MARA","COIN","MU","QCOM","AMD","AVGO","NVDL","SMCI","TSLA","RIVN","WFC","GS","BAC","AXP","MS","JPM","FDX","UPS","AMZN"], "sessionid": "'+ session_id +'", "filter": [""], "linebreak": true}'
         await websocket.send(payload)
         async for ticker in websocket:
             # Multiple Threads 
-            await Scan.pdl_scan(ticker)
-            #print (ticker)
+            #await Scan.pdl_scan(ticker)
+            print (ticker)
 
 asyncio.run(ws_connect(Stock_List))
