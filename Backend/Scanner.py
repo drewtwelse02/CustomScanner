@@ -5,6 +5,7 @@ from StdDev import StdDev
 from Session import Session
 import Scan
 import json
+import Tools
 from Db import DB
 
 Stock_List = ["AAPL","GOOGL","RDDT","MSTR","MARA","COIN","MU","QCOM","AMD","AVGO","NVDL","SMCI","TSLA","RIVN","WFC","GS","BAC","AXP","MS","JPM","FDX","UPS","AMZN"]
@@ -29,11 +30,12 @@ async def ws_connect(sl):
         payload = '{"symbols": ["AAPL","GOOGL","RDDT","MSTR","MARA","COIN","MU","QCOM","AMD","AVGO","NVDL","SMCI","TSLA","RIVN","WFC","GS","BAC","AXP","MS","JPM","FDX","UPS","AMZN"], "sessionid": "'+ session_id +'", "filter": [""], "linebreak": true}'
         await websocket.send(payload)
         async for ticker in websocket:
+            j_ticker = json.loads(ticker)
             # Multiple Threads
-            if((json.loads(ticker))["type"] == "trade"):
+            if(j_ticker["type"] == "trade"):
                 await Scan.pdl_scan(ticker)
-            elif((json.loads(ticker))["type"] == "timesale"):
-                print("")
+            elif(j_ticker["type"] == "timesale"):
+                print(Tools.convert_date(float(j_ticker["date"])))
 
 
 asyncio.run(ws_connect(Stock_List))
